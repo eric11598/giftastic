@@ -36,41 +36,62 @@ function getGif(query) {
     var gifs = JSON.parse(data);
     
 
-    var random = Math.floor(Math.random() * 24) + 1
+    var amountGifs = 10;
 
     console.log(gifs.data);
     
-    for (i = 0; i<10; i++)
+    for (i = 0; i<amountGifs; i++)
     {
-      var targetgif = gifs.data[i].images.fixed_height.url;
+      if(gifs.data[i].images.fixed_height.width < 150)
+      {
+        amountGifs++;
+        //i++;
+      }
+      else
+      {
+        var targetgif = gifs.data[i].images.fixed_height.url;
+        console.log(gifs.data[i].images.fixed_height.width);
 
-      var divname = gifs.data[i].id;
+        
 
-      jQuery('<div/>', {
-        id: divname,
-        class: 'gifContainer',
-      }).appendTo('#gifContainer');
 
-      jQuery('<img/>', {
-        id: divname+'Image',
-        class: 'gif',
-        title: 'Rating: '+gifs.data[i].rating, // PUT ALL META DATA HERE
-        src: targetgif,
+        jQuery('<div/>', {
+          id: divname,
+          class: 'gifContainer',
+        }).appendTo('#gifContainer');
 
-    }).appendTo('#'+divname);
+        jQuery('<img/>', {
+          id: divname +'Image',
+          class: 'gif',
+          title: info,  
+          src: targetgif,
+        }).appendTo('#'+divname);
 
-    jQuery('<button/>', {
-      id: divname+'Download',
-      class: 'btn btn-secondary btn-sm',
-      text: 'Download',  
-  }).appendTo('#'+divname);
+        jQuery('<button/>', {
+        id: divname +'Download',
+        class: 'btn btn-secondary btn-sm',
+        text: 'Download',  
+        }).appendTo('#'+divname);
 
-  $('#'+divname).click(function(e) {
-    console.log("EAT"+'#'+divname);
-    e.preventDefault();  //stop the browser from following
-    window.location.href = gifs.data[i].url;
-});
-      
+        jQuery('<button/>', {
+          id: divname +'Favorite',
+          class: 'btn btn btn-info btn-sm',
+          text: 'Favorite',  
+        }).appendTo('#'+divname);
+
+
+        $('#'+divname+"Download").click(function(e) {
+          console.log(this.id);
+        });
+
+        $('#'+divname+"Favorite").click(function(e) {
+          
+          console.log(this.id);
+          var temp = (this.id).substring(0, this.id.length-8);
+          console.log("#"+temp);
+          $("#"+temp).appendTo("#favoriteContainer");
+        });
+      }
     /*
       $('#gifContainer').append($('<img>',{id:'gif',src: targetgif}));
 
@@ -135,7 +156,7 @@ $("#submit").on("click", function(event) {
   renderButtons();
 });
 
-$(document).on("click", ".btn", displayGif);
+$(document).on("click", ".btn-success", displayGif);
 
 // Calling the renderButtons function at least once to display the initial list of movies
 renderButtons();
