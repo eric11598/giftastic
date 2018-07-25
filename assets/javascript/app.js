@@ -32,7 +32,7 @@ function getGif(query) {
 
   
 
-    httpGetAsync('http://api.giphy.com/v1/gifs/search?' + params, function(data) {
+    httpGetAsync('https://api.giphy.com/v1/gifs/search?' + params, function(data) {
     var gifs = JSON.parse(data);
     
 
@@ -52,18 +52,22 @@ function getGif(query) {
         var targetgif = gifs.data[i].images.fixed_height.url;
         console.log(gifs.data[i].images.fixed_height.width);
 
-        
+        var divname = gifs.data[i].id;
 
+        var infoDiv;
+        $(infoDiv).html('Rating: '+gifs.data[i].rating+'<br> Title: '+gifs.data[i].title);
+        console.log(infoDiv);
 
         jQuery('<div/>', {
           id: divname,
           class: 'gifContainer',
+          text: gifs.data[i].title+'<br>',
         }).appendTo('#gifContainer');
 
         jQuery('<img/>', {
           id: divname +'Image',
           class: 'gif',
-          title: info,  
+          title: infoDiv,  
           src: targetgif,
         }).appendTo('#'+divname);
 
