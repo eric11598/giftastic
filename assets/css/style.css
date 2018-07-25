@@ -2,8 +2,25 @@
     margin-right: 5px;
 }
 
-#gif{
-    float: left;
+.gif{
+
     padding: 2px;
+    
+}
+
+.gifContainer{
+    float:left;
+    position:relative;
+    padding: 2px;
+    padding-bottom: 40px;
+    border: 1px;
+    border-style: solid;
+}
+
+.btn-secondary{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 4px;
     
 }

@@ -46,13 +46,30 @@ function getGif(query) {
 
       var divname = gifs.data[i].id;
 
-      jQuery('<img/>', {
+      jQuery('<div/>', {
         id: divname,
+        class: 'gifContainer',
+      }).appendTo('#gifContainer');
+
+      jQuery('<img/>', {
+        id: divname+'Image',
         class: 'gif',
         title: 'Rating: '+gifs.data[i].rating, // PUT ALL META DATA HERE
         src: targetgif,
 
-    }).appendTo('#gifContainer');
+    }).appendTo('#'+divname);
+
+    jQuery('<button/>', {
+      id: divname+'Download',
+      class: 'btn btn-secondary btn-sm',
+      text: 'Download',  
+  }).appendTo('#'+divname);
+
+  $('#'+divname).click(function(e) {
+    console.log("EAT"+'#'+divname);
+    e.preventDefault();  //stop the browser from following
+    window.location.href = gifs.data[i].url;
+});
       
     /*
       $('#gifContainer').append($('<img>',{id:'gif',src: targetgif}));
@@ -71,7 +88,7 @@ function getGif(query) {
   
 }
 
-var games = ["Dues Ex", "Metal Gear Solid", "Borderlands", "Counter-Strike"];
+var games = ["Deus Ex", "Metal Gear Solid", "Borderlands", "Counter-Strike"];
 
 // Function for displaying movie data
 function renderButtons() {
