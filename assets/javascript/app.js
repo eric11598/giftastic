@@ -1,3 +1,7 @@
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
 var apikey = "AaROGpXAVa6N2SXY303PGYqP8HOkMNmo";
 
 function encodeQueryData(data)
@@ -21,56 +25,82 @@ function httpGetAsync(theUrl, callback)
 
 
 function getGif(query) {
-  console.log(query);
+  console.log("lol"+query);
   query = query.replace(' ', '+');
   var params = { 'api_key': apikey, 'q': query};
   params = encodeQueryData(params);
 
   
 
-  httpGetAsync('http://api.giphy.com/v1/gifs/search?' + params, function(data) {
+    httpGetAsync('http://api.giphy.com/v1/gifs/search?' + params, function(data) {
     var gifs = JSON.parse(data);
     
 
-    var random = Math.floor(Math.random() * 24) + 1  
-    var targetgif = gifs.data[random].images.fixed_width.url;
-    $('#timerText').append($("<br>"));
-    $('#timerText').append($('<img>',{id:'gif',src: targetgif}));
+    var random = Math.floor(Math.random() * 24) + 1
+
+    console.log(gifs.data);
+    
+    for (i = 0; i<10; i++)
+    {
+      var targetgif = gifs.data[i].images.fixed_height.url;
+
+      var divname = gifs.data[i].id;
+
+      jQuery('<img/>', {
+        id: divname,
+        class: 'gif',
+        title: 'Rating: '+gifs.data[i].rating, // PUT ALL META DATA HERE
+        src: targetgif,
+
+    }).appendTo('#gifContainer');
+      
+    /*
+      $('#gifContainer').append($('<img>',{id:'gif',src: targetgif}));
+
+      
+      $(divname).attr('data-toggle', 'tooltip');
+      //$("#gifContainer").attr('data-toggle', 'tooltip');
+      $(divname).append($('<h2>',{id:'rating',src: gifs.data[i].rating}));
+
+      $("#gifContainer").append(divname);*/
+      
+    }
 
   });
 
   
 }
 
-var movies = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+var games = ["Dues Ex", "Metal Gear Solid", "Borderlands", "Counter-Strike"];
 
 // Function for displaying movie data
 function renderButtons() {
 
   // Deleting the movie buttons prior to adding new movie buttons
   // (this is necessary otherwise we will have repeat buttons)
-  $("#gifsContainer").empty();
+  $("#buttonContainer").empty();
 
   // Looping through the array of movies
-  for (var i = 0; i < movies.length; i++) {
+  for (var i = 0; i < games.length; i++) {
 
     // Then dynamicaly generating buttons for each movie in the array.
     // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
     var a = $("<button>");
     // Adding a class
-    a.addClass("movie");
+    a.addClass("btn btn-success");
     // Adding a data-attribute with a value of the movie at index i
-    a.attr("data-name", movies[i]);
+    a.attr("data-name", games[i]);
     // Providing the button's text with a value of the movie at index i
-    a.text(movies[i]);
+    a.text(games[i]);
     // Adding the button to the HTML
-    $("#gifsContainer").append(a);
+    $("#buttonContainer").append(a);
   }
 }
-function displayMovieInfo() {
+function displayGif() {
 
+    console.log("YOU ARE HERE NOW GAYBOY");
     var gifs = $(this).attr("data-name");
-    console.log(gifs);
+    getGif(gifs);
 }
 
 // This function handles events where one button is clicked
@@ -80,15 +110,15 @@ $("#submit").on("click", function(event) {
   event.preventDefault();
 
   // This line will grab the text from the input box
-  var movie = $("#addGif").val().trim();
+  var game = $("#addGif").val().trim();
   // The movie from the textbox is then added to our array
-  movies.push(movie);
+  games.push(game);
 
   // calling renderButtons which handles the processing of our movie array
   renderButtons();
 });
 
-$(document).on("click", ".movie", displayMovieInfo);
+$(document).on("click", ".btn", displayGif);
 
 // Calling the renderButtons function at least once to display the initial list of movies
 renderButtons();
