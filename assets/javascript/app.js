@@ -42,6 +42,7 @@ function getGif(query) {
     
     for (i = 0; i<amountGifs; i++)
     {
+
       if(gifs.data[i].images.fixed_height.width < 150)
       {
         amountGifs++;
@@ -54,20 +55,22 @@ function getGif(query) {
 
         var divname = gifs.data[i].id;
 
-        var infoDiv;
-        $(infoDiv).html('Rating: '+gifs.data[i].rating+'<br> Title: '+gifs.data[i].title);
-        console.log(infoDiv);
 
         jQuery('<div/>', {
           id: divname,
           class: 'gifContainer',
-          text: gifs.data[i].title+'<br>',
         }).appendTo('#gifContainer');
+
+        jQuery('<div/>', {
+          id: divname+'overlay',
+          class: 'overlay',
+          text: 'hi',
+          onclick: "off()",
+        }).appendTo('#'+divname);
 
         jQuery('<img/>', {
           id: divname +'Image',
-          class: 'gif',
-          title: infoDiv,  
+          class: 'gif',  
           src: targetgif,
         }).appendTo('#'+divname);
 
@@ -83,9 +86,24 @@ function getGif(query) {
           text: 'Favorite',  
         }).appendTo('#'+divname);
 
+        jQuery('<button/>', {
+          id: divname +'Info',
+          class: 'btn btn-warning btn-sm',
+          text: 'Info',  
+        }).appendTo('#'+divname);
+
+        
+
 
         $('#'+divname+"Download").click(function(e) {
-          console.log(this.id);
+
+        });
+
+        $('#'+divname+"Info").click(function(e) {
+          
+          var temp = (this.id).substring(0, this.id.length-4);
+          console.log("#"+temp+"overlay");
+          document.getElementById(temp+"overlay").style.display = "block";
         });
 
         $('#'+divname+"Favorite").click(function(e) {
@@ -95,8 +113,21 @@ function getGif(query) {
           console.log("#"+temp);
           $("#"+temp).appendTo("#favoriteContainer");
         });
+
+        
+
+
       }
     /*
+      
+      function on() {
+        document.getElementById(divname+"overlay").style.display = "block";
+      }
+      
+      function off() {
+        document.getElementById(divname+"overlay").style.display = "none";
+
+
       $('#gifContainer').append($('<img>',{id:'gif',src: targetgif}));
 
       
@@ -112,6 +143,7 @@ function getGif(query) {
 
   
 }
+
 
 var games = ["Deus Ex", "Metal Gear Solid", "Borderlands", "Counter-Strike"];
 
@@ -164,4 +196,5 @@ $(document).on("click", ".btn-success", displayGif);
 
 // Calling the renderButtons function at least once to display the initial list of movies
 renderButtons();
+
 
