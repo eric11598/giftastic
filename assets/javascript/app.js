@@ -4,6 +4,11 @@ $(function () {
 
 var apikey = "AaROGpXAVa6N2SXY303PGYqP8HOkMNmo";
 
+function off(div){
+  document.getElementById(div).style.display = "none";
+}
+
+
 function encodeQueryData(data)
 {
    var ret = [];
@@ -46,7 +51,7 @@ function getGif(query) {
       if(gifs.data[i].images.fixed_height.width < 150)
       {
         amountGifs++;
-        //i++;
+        
       }
       else
       {
@@ -54,6 +59,8 @@ function getGif(query) {
         console.log(gifs.data[i].images.fixed_height.width);
 
         var divname = gifs.data[i].id;
+
+        var divtemp = gifs.data[i];
 
 
         jQuery('<div/>', {
@@ -65,7 +72,7 @@ function getGif(query) {
           id: divname+'overlay',
           class: 'overlay',
           text: 'hi',
-          onclick: "off()",
+          onclick: "off(this.id)",
         }).appendTo('#'+divname);
 
         jQuery('<img/>', {
@@ -89,10 +96,11 @@ function getGif(query) {
         jQuery('<button/>', {
           id: divname +'Info',
           class: 'btn btn-warning btn-sm',
-          text: 'Info',  
+          text: 'Info', 
         }).appendTo('#'+divname);
 
         
+      
 
 
         $('#'+divname+"Download").click(function(e) {
@@ -101,9 +109,29 @@ function getGif(query) {
 
         $('#'+divname+"Info").click(function(e) {
           
+         
+          var gifIndex;
+
+          
           var temp = (this.id).substring(0, this.id.length-4);
-          console.log("#"+temp+"overlay");
-          document.getElementById(temp+"overlay").style.display = "block";
+
+          for(i=0; i < gifs.data.length; i++)
+          {
+            console.log(gifs.data[i].id +"=="+temp);
+            if(gifs.data[i].id === temp)
+              gifIndex = i;
+          }
+          document.getElementById(temp+'overlay').style.display = "block";
+          $('#'+temp+'overlay').text('Name: '+gifs.data[gifIndex].title);
+          $('#'+temp+'overlay').append('<br> Rating: '+gifs.data[gifIndex].rating);
+          $('#'+temp+'overlay').append('<br> Url: '+gifs.data[gifIndex].bitly_gif_url);
+
+          
+          console.log(gifs.data[gifIndex].title);
+          
+          
+          
+          
         });
 
         $('#'+divname+"Favorite").click(function(e) {
