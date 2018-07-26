@@ -4,9 +4,36 @@ $(function () {
 
 var apikey = "AaROGpXAVa6N2SXY303PGYqP8HOkMNmo";
 
-function off(div){
+function off(div) {
   document.getElementById(div).style.display = "none";
 }
+
+
+
+function stop(div) {
+
+  var state = $(div).attr("data-state");
+
+  if (state === "still") 
+  {
+    $(div).attr("src", $(div).attr("data-animate"));
+    $(div).attr("data-state", "animate");
+  } 
+  else 
+  {
+    $(div).attr("src", $(div).attr("data-still"));
+    $(div).attr("data-state", "still");
+  }
+};
+
+function favorite(div) {
+  console.log(div);
+  var temp = '#'+(div).substring(0, div.length-8);
+  $(div).appendTo("#favoriteContainer");
+  $(temp).appendTo("#favoriteContainer");
+}
+
+
 
 
 function encodeQueryData(data)
@@ -49,10 +76,8 @@ function getGif(query) {
     {
 
       if(gifs.data[i].images.fixed_height.width < 150)
-      {
         amountGifs++;
         
-      }
       else
       {
         var targetgif = gifs.data[i].images.fixed_height.url;
@@ -60,8 +85,8 @@ function getGif(query) {
 
         var divname = gifs.data[i].id;
 
-        var divtemp = gifs.data[i];
 
+        
 
         jQuery('<div/>', {
           id: divname,
@@ -77,8 +102,12 @@ function getGif(query) {
 
         jQuery('<img/>', {
           id: divname +'Image',
-          class: 'gif',  
-          src: targetgif,
+          'data-still': gifs.data[i].images.fixed_height_still.url,
+          'data-animate': targetgif,
+          'data-state': "still",
+          class: 'gif',
+          onclick: "stop(this)",  
+          src: gifs.data[i].images.fixed_height_still.url,
         }).appendTo('#'+divname);
 
         jQuery('<button/>', {
@@ -90,7 +119,8 @@ function getGif(query) {
         jQuery('<button/>', {
           id: divname +'Favorite',
           class: 'btn btn btn-info btn-sm',
-          text: 'Favorite',  
+          text: 'Favorite',
+          onclick: "favorite(this.id)",  
         }).appendTo('#'+divname);
 
         jQuery('<button/>', {
@@ -108,11 +138,7 @@ function getGif(query) {
         });
 
         $('#'+divname+"Info").click(function(e) {
-          
-         
           var gifIndex;
-
-          
           var temp = (this.id).substring(0, this.id.length-4);
 
           for(i=0; i < gifs.data.length; i++)
@@ -124,26 +150,14 @@ function getGif(query) {
           document.getElementById(temp+'overlay').style.display = "block";
           $('#'+temp+'overlay').text('Name: '+gifs.data[gifIndex].title);
           $('#'+temp+'overlay').append('<br> Rating: '+gifs.data[gifIndex].rating);
+          $('#'+temp+'overlay').append('<br> ID: '+gifs.data[gifIndex].id);
           $('#'+temp+'overlay').append('<br> Url: '+gifs.data[gifIndex].bitly_gif_url);
+          $('#'+temp+'overlay').append('<br> Source: '+gifs.data[gifIndex].source);
+
 
           
-          console.log(gifs.data[gifIndex].title);
-          
-          
-          
-          
+          console.log(gifs.data[gifIndex].title); 
         });
-
-        $('#'+divname+"Favorite").click(function(e) {
-          
-          console.log(this.id);
-          var temp = (this.id).substring(0, this.id.length-8);
-          console.log("#"+temp);
-          $("#"+temp).appendTo("#favoriteContainer");
-        });
-
-        
-
 
       }
     /*
@@ -200,7 +214,6 @@ function renderButtons() {
 }
 function displayGif() {
 
-    console.log("YOU ARE HERE NOW GAYBOY");
     var gifs = $(this).attr("data-name");
     getGif(gifs);
 }
