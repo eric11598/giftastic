@@ -22,28 +22,20 @@
     border-style: solid;
 }
 
-.btn-secondary{
+.btn-info{
     position: absolute;
     bottom: 0;
     left: 0;
     margin: 4px;
     
 }
-.btn-info{
+.btn-warning {
     position: absolute;
     bottom:0;
     left:80px;
     margin: 4px;
 }
 
-.btn-warning{
-
-    position: absolute;
-    bottom:0;
-    left:150px;
-    margin: 4px;
-
-}
 
 .overlay {
     position: absolute;
